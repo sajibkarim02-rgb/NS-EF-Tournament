@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>NS E-TOURNAMENT</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;background:#080d18;color:white;font-family:Arial,sans-serif}
+header{padding:18px;background:#111a2b;border-bottom:1px solid #26344c}
+.logo{font-size:22px;font-weight:bold;color:#60a5fa}
+.logo span{color:#facc15}
+.container{max-width:800px;margin:auto;padding:16px}
+.card{background:#121c2e;border:1px solid #263550;border-radius:15px;padding:18px;margin-bottom:16px}
+input{width:100%;padding:13px;margin:9px 0;background:#0b1220;border:1px solid #334155;border-radius:10px;color:white;font-size:15px}
+button{border:0;padding:13px;border-radius:10px;background:#2563eb;color:white;font-weight:bold;cursor:pointer}
+button:active{opacity:.7}
+.full{width:100%}
+.switch{background:transparent;color:#60a5fa;padding:5px}
+.auth{max-width:450px;margin:35px auto}
+h2{color:#60a5fa}
+.hero{background:linear-gradient(135deg,#143d79,#101a30);padding:22px;border-radius:16px;margin-bottom:16px}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.stat{background:#18243a;padding:15px;border-radius:12px}
+.menu{display:flex;gap:8px;overflow:auto;padding:10px 0}
+.menu button{white-space:nowrap;background:#18243a}
+.menu button.active{background:#2563eb}
+.section{display:none}
+.section.active{display:block}
+.item{background:#18243a;padding:14px;border-radius:12px;margin:10px 0}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+#app{display:none}
+#auth{display:block}
+.notice{color:#aab8ce;font-size:13px}
+#msg{color:#fca5a5}
+@media(min-width:600px){.stats{grid-template-columns:repeat(4,1fr)}}
+</style>
+</head>
+<body>
+<header><div class="logo">⚔️ NS <span>E-TOURNAMENT</span></div></header>
+<!-- AUTH -->
+<div id="auth" class="container">
+<div class="card auth">
+<div id="loginBox">
+<h2>🔐 Player Login</h2>
+<p>Welcome back to NS Arena</p>
+<input id="loginEmail" type="email" placeholder="Email address">
+<input id="loginPass" type="password" placeholder="Password">
+<button class="full" onclick="login()">LOGIN</button>
+<p>Don't have an account? <button class="switch" onclick="toggleAuth()">Register</button></p>
+</div>
+<div id="registerBox" style="display:none">
+<h2>📝 Create Account</h2>
+<input id="regName" type="text" placeholder="Player Name">
+<input id="regEmail" type="email" placeholder="Email address">
+<input id="regPass" type="password" placeholder="Password (minimum 6)">
+<input id="regConfirm" type="password" placeholder="Confirm Password">
+<button class="full" onclick="register()">REGISTER</button>
+<p>Already have an account? <button class="switch" onclick="toggleAuth()">Login</button></p>
+</div>
+<p id="msg"></p>
+<p class="notice">Your account will be created securely using Firebase Authentication.</p>
+</div>
+</div>
+<!-- APP -->
+<div id="app">
+<main class="container">
+<div class="row" style="margin-bottom:15px">
+<div><div id="welcome" style="font-weight:bold">Welcome</div><div class="notice">NS E-Tournament Arena</div></div>
+<button onclick="logout()" style="background:#dc2626">Logout</button>
+</div>
+<div class="hero"><h2>PLAY. COMPETE. WIN.</h2><p>Welcome to NS E-Tournament Arena</p></div>
+<div class="stats">
+<div class="stat">Wallet<h2>৳0.00</h2></div>
+<div class="stat">Matches<h2>0</h2></div>
+<div class="stat">Wins<h2>0</h2></div>
+<div class="stat">Trophies<h2>0 🏆</h2></div>
+</div>
+<div class="menu">
+<button class="active" onclick="show('home',this)">🏠 Home</button>
+<button onclick="show('tournament',this)">🏆 Tournament</button>
+<button onclick="show('wallet',this)">💰 Wallet</button>
+<button onclick="show('matches',this)">⚽ Matches</button>
+<button onclick="show('champions',this)">🥇 Champions</button>
+<button onclick="show('profile',this)">👤 Profile</button>
+</div>
+<section id="home" class="section active">
+<div class="card"><h3>📢 Announcement</h3><p>No announcements yet.</p></div>
+<div class="card"><h3>🔥 Featured Tournament</h3><div class="item"><b>NS eFootball Cup</b><p>Slots: 32</p><p>Prize Pool: ৳0</p><button onclick="show('tournament')">View Tournament</button></div></div>
+</section>
+<section id="tournament" class="section">
+<div class="card"><h3>🏆 Tournament Arena</h3><div class="item"><b>NS eFootball Cup</b><p>🎮 eFootball Mobile</p><p>👥 Slots: 32</p><p>💰 Entry Fee: ৳0</p><p>🏆 Prize Pool: ৳0</p><button onclick="alert('Tournament joining will be added in Phase 3')">Join Tournament</button></div></div>
+</section>
+<section id="wallet" class="section">
+<div class="card"><h3>💰 My Wallet</h3><h2>৳0.00</h2><button onclick="alert('Coming in Phase 2')">Deposit</button><button onclick="alert('Coming in Phase 2')">Withdraw</button><p>bKash / Nagad will be connected later.</p></div>
+</section>
+<section id="matches" class="section"><div class="card"><h3>⚽ My Matches</h3><p>No matches yet.</p><h3>Match History</h3><p>No match history.</p></div></section>
+<section id="champions" class="section"><div class="card"><h3>🥇 Hall of Champions</h3><p>No champions yet.</p><h3>🏆 Awards</h3><p>No awards yet.</p></div></section>
+<section id="profile" class="section">
+<div class="card"><h3>👤 My Profile</h3><p id="profileName">Player</p><p id="profileEmail"></p></div>
+<div class="card"><h3>🛡️ Support & Rules</h3><p>Support</p><p>Privacy & Security</p><p>Rules & Regulations</p></div>
+</section>
+</main>
+</div>
+<script>
+function toggleAuth(){
+ document.getElementById("msg").textContent="";
+ const l=document.getElementById("loginBox"),r=document.getElementById("registerBox");
+ l.style.display=l.style.display==="none"?"block":"none";
+ r.style.display=r.style.display==="none"?"block":"none";
+}
+function show(id,btn){
+ document.querySelectorAll(".section").forEach(s=>s.classList.remove("active"));
+ document.getElementById(id).classList.add("active");
+ document.querySelectorAll(".menu button").forEach(b=>b.classList.remove("active"));
+ if(btn)btn.classList.add("active");
+ window.scrollTo(0,0);
+}
+</script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/13.4.0/firebase-app.js";
+import {getAuth,createUserWithEmailAndPassword,signInWithEmailAndPassword,signOut,onAuthStateChanged,updateProfile} from "https://www.gstatic.com/firebasejs/13.4.0/firebase-auth.js";
+const firebaseConfig = {
+  apiKey: "AIzaSyAmgvJwJMgx37_0asDR6NGnMr-slPNtAaE",
+  authDomain: "ns-e-tournament.firebaseapp.com",
+  projectId: "ns-e-tournament",
+  storageBucket: "ns-e-tournament.firebasestorage.app",
+  messagingSenderId: "1001047844280",
+  appId: "1:1001047844280:web:3e92c88b58b02769599b4d",
+  measurementId: "G-4TN2CHYY7W"
+};
+const appFirebase=initializeApp(firebaseConfig);
+const auth=getAuth(appFirebase);
+window.register=async function(){
+ const name=document.getElementById("regName").value.trim(),email=document.getElementById("regEmail").value.trim(),pass=document.getElementById("regPass").value,confirm=document.getElementById("regConfirm").value,msg=document.getElementById("msg");
+ if(!name||!email||!pass||!confirm){msg.textContent="সব ঘর পূরণ করো";return}
+ if(pass.length<6){msg.textContent="Password কমপক্ষে 6 অক্ষরের হতে হবে";return}
+ if(pass!==confirm){msg.textContent="Password মিলছে না";return}
+ msg.textContent="Creating account...";
+ try{const userCredential=await createUserWithEmailAndPassword(auth,email,pass);await updateProfile(userCredential.user,{displayName:name});msg.textContent=""}
+ catch(e){msg.textContent=errorMessage(e.code)}
+};
+window.login=async function(){
+ const email=document.getElementById("loginEmail").value.trim(),pass=document.getElementById("loginPass").value,msg=document.getElementById("msg");
+ if(!email||!pass){msg.textContent="Email ও Password লিখো";return}
+ msg.textContent="Logging in...";
+ try{await signInWithEmailAndPassword(auth,email,pass);msg.textContent=""}
+ catch(e){msg.textContent=errorMessage(e.code)}
+};
+window.logout=async function(){try{await signOut(auth)}catch(e){document.getElementById("msg").textContent=errorMessage(e.code)}};
+function errorMessage(code){
+ switch(code){
+  case "auth/email-already-in-use":return "এই Email দিয়ে আগে Account তৈরি হয়েছে";
+  case "auth/invalid-email":return "Email সঠিক নয়";
+  case "auth/weak-password":return "Password আরও শক্তিশালী করো";
+  case "auth/invalid-credential":return "Email অথবা Password ভুল";
+  case "auth/network-request-failed":return "Internet connection পরীক্ষা করো";
+  default:return "Error: "+code;
+ }
+}
+onAuthStateChanged(auth,user=>{
+ const authBox=document.getElementById("auth"),appBox=document.getElementById("app");
+ if(user){
+  authBox.style.display="none";appBox.style.display="block";
+  document.getElementById("welcome").textContent="Welcome, "+(user.displayName||"Player");
+  document.getElementById("profileName").textContent="Player Name: "+(user.displayName||"Player");
+  document.getElementById("profileEmail").textContent="Email: "+user.email;
+ }else{authBox.style.display="block";appBox.style.display="none"}
+});
+</script>
+</body>
+</html>
